@@ -355,7 +355,8 @@ font in the preamble.tex file by specifying `customfont' in the class options}
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[T1]{fontenc}
 
-\input{glyphtounicode}
+%texpad on osx requires correct specification of paths for include
+\input{Classes/glyphtounicode}
 \pdfglyphtounicode{f_f}{FB00}
 \pdfglyphtounicode{f_i}{FB01}
 \pdfglyphtounicode{f_l}{FB02}
