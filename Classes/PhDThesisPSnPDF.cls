@@ -10,6 +10,10 @@
 %% License: MIT License (c) 2013 Krishna Kumar                                %%
 %% GitHub Repo: https://github.com/kks32/phd-thesis-template/                 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Last Modification: 2014/03/02                                              %%
+%% Modified by: Chris Yereaztian                                              %%
+%% GitHub Repo: https://github.com/cvarta/phd-thesis-template                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % ************************** Class Identification ******************************
 \NeedsTeXFormat{LaTeX2e}
@@ -63,6 +67,10 @@
 
 \newif\ifPHD@pageStyleII\PHD@pageStyleIIfalse % Set Page StyleII
 \DeclareOption{PageStyleII}{\PHD@pageStyleIItrue}
+
+%adding custom pagestyle to my liking that includes the logo of my university
+\newif\ifPHD@pageStyleIII\PHD@pageStyleIIIfalse % Set Page StyleIII
+\DeclareOption{PageStyleIII}{\PHD@pageStyleIIItrue}
 
 % ***************************** Custom Margins  ********************************
 \newif\ifsetMargin\setMarginfalse % Margins are not set
@@ -419,6 +427,26 @@ font in the preamble.tex file by specifying `customfont' in the class options}
 \fancyhead[LE]{\bfseries \nouppercase \leftmark}
 \fancyfoot[C]{\thepage}
 
+%adding custom header and footer style for fhnw
+\else
+\ifPHD@pageStyleIII
+% Style 3: Sets Page Number at the bottom with Chapter Name on the left side including the FHNW logo and the title
+% of the thesis in the header
+%
+% Note that \leftmark and \rightmark convert the names to uppercase, whichever was the formatting of the text. If you want them to print the actual name of the chapter without converting it to uppercase use the following command:
+%\renewcommand{\chaptermark}[1]{\markboth{##1}{}}
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter.\ ##1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ ##1}}
+% start from scratch, clears customization
+\fancyhf{}
+\fancyhead[L]{\includegraphics[height=10mm]{Figs/fhnw_ht_ger}}
+\fancyhead[R]{\@title}
+\fancyfoot[L]{\nouppercase \leftmark}
+\fancyfoot[R]{\thepage}
+%redefine width of head and footer line separaters
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0.3pt}
+
 
 \else
 % Default Style: Sets Page Number at the Top (LE/RO) with Chapter/Section Name
@@ -435,13 +463,19 @@ font in the preamble.tex file by specifying `customfont' in the class options}
 
 }
 
-\setlength{\headheight}{14.5pt}
+%\setlength{\headheight}{14.5pt}
+\setlength{\headheight}{36pt}
 %\renewcommand{\headrulewidth}{0.5pt}
 %\renewcommand{\footrulewidth}{0pt}
 \fancypagestyle{plain}{
   \fancyhead{}
   \renewcommand{\headrulewidth}{0pt}
 }
+
+% add header and footer on chapter pages
+\RequirePackage{etoolbox}
+\patchcmd{\chapter}{\thispagestyle{plain}}{\thispagestyle{fancy}}{}{}
+\patchcmd{\tableofcontents}{\thispagestyle{plain}}{\thispagestyle{fancy}}{}{}
 
 % If Margin has been set (default margin print/online version)
 \ifsetMargin
@@ -451,7 +485,7 @@ font in the preamble.tex file by specifying `customfont' in the class options}
 % **************** Clear Header Style on the Last Empty Odd pages **************
 \renewcommand{\cleardoublepage}{\clearpage\if@twoside \ifodd\c@page\else%
 	\hbox{}%
-	\thispagestyle{empty}  % Empty header styles
+	%\thispagestyle{empty}  % Empty header styles
 	\newpage%
 	\if@twocolumn\hbox{}\newpage\fi\fi\fi}
 
@@ -463,7 +497,9 @@ font in the preamble.tex file by specifying `customfont' in the class options}
 
 \newenvironment{romanpages}{
   \setcounter{page}{1}
-  \renewcommand{\thepage}{\roman{page}}}
+  \renewcommand{\thepage}{\roman{page}}
+% adds header/footer to list of figures and tables
+  \thispagestyle{fancy}}
 {\newpage\renewcommand{\thepage}{\arabic{page}}}
 
 % ******************************* Appendices **********************************
@@ -549,13 +585,16 @@ font in the preamble.tex file by specifying `customfont' in the class options}
 \computeTitlePageSpacing
 
 \begin{singlespace}
-\begin{center}
+\thispagestyle{fancy}
+\begin{flushright}
+
+\vspace*{25mm}
+\vspace{.25\PHD@titlepagespacing}
 % Title
 {\Huge \bfseries{\@title} \par}
-\vspace{.25\PHD@titlepagespacing}
 
 % Crest
-{\@crest \par}
+%{\@crest \par}
 \vspace{.2\PHD@titlepagespacing}
 
 % Author
@@ -574,7 +613,7 @@ font in the preamble.tex file by specifying `customfont' in the class options}
 {\large \it {\@degree} \par} 
 
 
-\end{center}
+\end{flushright}
 \vfill
 \large
 \begin{minipage}{0.49\textwidth}
@@ -596,7 +635,9 @@ font in the preamble.tex file by specifying `customfont' in the class options}
 \cleardoublepage
 \setsinglecolumn
 \vspace*{0.2\textheight}
-\thispagestyle{empty}
+%\thispagestyle{empty}
+% modifying header/footer
+\thispagestyle{fancy}
 \centering
 }
 
@@ -610,7 +651,9 @@ font in the preamble.tex file by specifying `customfont' in the class options}
 \cleardoublepage
 \setsinglecolumn
 \chapter*{\centering \Large Declaration}
-\thispagestyle{empty}
+%\thispagestyle{empty}
+% modifying header/footer
+\thispagestyle{fancy}
 }{
 \flushright
 \@author{}\\
@@ -628,7 +671,9 @@ font in the preamble.tex file by specifying `customfont' in the class options}
 \cleardoublepage
 \setsinglecolumn
 \chapter*{\centering \Large Acknowledgements}
-\thispagestyle{empty}
+%\thispagestyle{empty}
+%modifying header/footer
+\thispagestyle{fancy}
 }
 
 
@@ -717,7 +762,9 @@ font in the preamble.tex file by specifying `customfont' in the class options}
 \newenvironment{abstract} {
 \ifPHD@abstract
 % Separate abstract as per Student Registry guidelines
-	\thispagestyle{empty}
+	%\thispagestyle{empty}
+	%modifying header/footer
+    \thispagestyle{fancy}
 	\setsinglecolumn
 	\begin{center}
 		{ \Large {\bfseries {\@title}} \par}
@@ -729,7 +776,9 @@ font in the preamble.tex file by specifying `customfont' in the class options}
 	\cleardoublepage
 	\setsinglecolumn 
 	\chapter*{\centering \Large Abstract}
-	\thispagestyle{empty}
+	%\thispagestyle{empty}
+	%modifying header/footer
+    \thispagestyle{fancy}
 \fi
 }
 

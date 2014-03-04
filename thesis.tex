@@ -1,7 +1,7 @@
 % ******************************* PhD Thesis Template **************************
 % Please have a look at the README.md file for info on how to use the template
 
-\documentclass[a4paper,12pt,times,numbered,print,index]{Classes/PhDThesisPSnPDF}
+\documentclass[a4paper,12pt,oneside,PageStyleIII,times,numbered,print,index]{Classes/PhDThesisPSnPDF}
 
 % ******************************************************************************
 % ******************************* Class Options ********************************
@@ -112,14 +112,18 @@
 
 \end{titlepage}
 
-\include{Dedication/dedication}
+%\include{Dedication/dedication}
 \include{Declaration/declaration}
-\include{Acknowledgement/acknowledgement}
+%\include{Acknowledgement/acknowledgement}
 \include{Abstract/abstract}
 
 % *********************** Adding TOC and List of Figures ***********************
 
-\tableofcontents
+%\tableofcontents
+% adding header/footer to table of content according to the pagestyle defined in 
+% the PhDThesisPSnPDF class file which is determined by the PageStyle option in
+%the documentclass directive
+\tableofcontents{\thispagestyle{fancy}}
 
 \listoffigures
 
